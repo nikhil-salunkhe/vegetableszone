@@ -39,12 +39,12 @@ function App() {
         {/* ================= AUTH PAGES ================= */}
         <Route element={<AuthLayout />}>
           <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
         </Route>
 
         {/* ================= MAIN WEBSITE ================= */}
         <Route element={<MainLayout />}>
-          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/vegetables" element={<Vegetables />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/profile" element={<Profile />} />
