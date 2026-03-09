@@ -1,0 +1,138 @@
+/* Page Background */
+
+.supplier-container{
+    padding:40px;
+    min-height:100vh;
+    background:linear-gradient(135deg,#e8f5e9,#ffffff);
+    font-family: "Poppins", sans-serif;
+  }
+  
+  /* Title */
+  
+  .title{
+    text-align:center;
+    font-size:32px;
+    margin-bottom:30px;
+    color:#2e7d32;
+  }
+  
+  /* Form Card */
+  
+  .supplier-form{
+    max-width:600px;
+    margin:auto;
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+    padding:25px;
+    border-radius:12px;
+  
+    background:rgba(255,255,255,0.6);
+    backdrop-filter:blur(10px);
+  
+    box-shadow:0 8px 20px rgba(0,0,0,0.1);
+  
+    animation:fadeIn 0.8s ease;
+  }
+  
+  .supplier-form input{
+    padding:12px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    font-size:14px;
+    transition:0.3s;
+  }
+  
+  .supplier-form input:focus{
+    border-color:#4caf50;
+    outline:none;
+    box-shadow:0 0 5px #4caf50;
+  }
+  
+  /* Add Button */
+  
+  .supplier-form button{
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    background:#4caf50;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.3s;
+  }
+  
+  .supplier-form button:hover{
+    background:#2e7d32;
+    transform:scale(1.05);
+  }
+  
+  /* Supplier Grid */
+  
+  .supplier-grid{
+    margin-top:40px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+  }
+  
+  /* Supplier Card */
+  
+  .supplier-card{
+    padding:20px;
+    border-radius:12px;
+    text-align:center;
+    background:white;
+  
+    box-shadow:0 6px 15px rgba(0,0,0,0.1);
+    transition:0.3s;
+  
+    animation:slideUp 0.5s ease;
+  }
+  
+  .supplier-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+  }
+  
+  /* Delete Button */
+  
+  .delete-btn{
+    margin-top:10px;
+    padding:8px 14px;
+    border:none;
+    border-radius:6px;
+    background:#e53935;
+    color:white;
+    cursor:pointer;
+    transition:0.3s;
+  }
+  
+  .delete-btn:hover{
+    background:#b71c1c;
+    transform:scale(1.05);
+  }
+  
+  /* Animations */
+  
+  @keyframes fadeIn{
+    from{
+      opacity:0;
+      transform:translateY(-20px);
+    }
+    to{
+      opacity:1;
+      transform:translateY(0);
+    }
+  }
+  
+  @keyframes slideUp{
+    from{
+      opacity:0;
+      transform:translateY(30px);
+    }
+    to{
+      opacity:1;
+      transform:translateY(0);
+    }
+  }

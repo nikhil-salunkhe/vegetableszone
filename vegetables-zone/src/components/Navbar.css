@@ -1,0 +1,117 @@
+/* 🌿 NAVBAR BASE */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: linear-gradient(90deg, #1f7a1f, #2ecc71);
+  padding: 14px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  animation: slideDown 0.6s ease;
+}
+
+/* 🥕 LOGO */
+.navbar h2 {
+  color: #fff;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  animation: pulse 2s infinite;
+}
+
+/* 🔗 NAV LINKS */
+.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  align-items: center;
+}
+
+.navbar ul li {
+  position: relative;
+}
+
+/* LINKS */
+.navbar ul li a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 5px 0;
+  transition: all 0.3s ease;
+}
+
+/* ✨ HOVER UNDERLINE ANIMATION */
+.navbar ul li a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background-color: #ffffff;
+  transition: width 0.3s ease;
+}
+
+.navbar ul li a:hover::after {
+  width: 100%;
+}
+
+/* 🚪 LOGOUT BUTTON */
+.logout-btn {
+  background: #ffffff;
+  color: #1f7a1f;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* BUTTON HOVER */
+.logout-btn:hover {
+  background: #ff4d4d;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* 🎬 ANIMATIONS */
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 📱 RESPONSIVE */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .navbar ul {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+}

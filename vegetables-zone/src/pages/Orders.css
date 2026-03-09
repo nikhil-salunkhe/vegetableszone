@@ -1,0 +1,168 @@
+/* ================= BACKGROUND ================= */
+.orders-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #6ddf91, #3bb78f);
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+/* ================= PAGE TITLE ================= */
+.orders-page h1 {
+  color: #2f7d32;
+  margin-bottom: 25px;
+  text-align: center;
+  font-size: 2rem;
+}
+
+/* ================= EMPTY STATE ================= */
+.empty-orders {
+  background: #fff;
+  padding: 20px 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  font-size: 1.1rem;
+  color: #555;
+  text-align: center;
+}
+
+/* ================= ORDER CARD ================= */
+.order-card {
+  background: #fff;
+  width: 100%;
+  max-width: 700px;
+  border-radius: 16px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  padding: 20px 25px;
+  margin-bottom: 25px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.order-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* ================= ORDER HEADER ================= */
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.order-header p {
+  margin: 5px 0;
+  font-weight: 500;
+}
+
+/* ================= ORDER STATUS COLORS ================= */
+.order-status {
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 8px;
+  color: #fff;
+  display: inline-block;
+}
+
+.status-delivered {
+  background-color: #4caf50; /* green */
+}
+
+.status-pending {
+  background-color: #ff9800; /* orange */
+}
+
+.status-cancelled {
+  background-color: #f44336; /* red */
+}
+
+/* ================= ORDER ITEMS ================= */
+.order-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 12px;
+  background: #f7f7f7;
+  border-radius: 12px;
+  transition: background 0.2s;
+}
+
+.order-item:hover {
+  background: #e0f4e0;
+}
+
+.order-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+}
+
+/* ================= BUTTONS ================= */
+.delete-order-btn,
+.delete-item-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  background: #f44336;
+  color: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.delete-order-btn:hover,
+.delete-item-btn:hover {
+  transform: scale(1.05);
+  background: #d32f2f;
+}
+
+/* ================= RESPONSIVE DESIGN ================= */
+@media (max-width: 768px) {
+  .order-card {
+    padding: 15px 20px;
+  }
+
+  .order-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .order-items {
+    gap: 10px;
+  }
+
+  .order-img {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .orders-page {
+    padding: 20px 10px;
+  }
+
+  .order-card {
+    padding: 12px 15px;
+  }
+
+  .delete-order-btn,
+  .delete-item-btn {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+  }
+}

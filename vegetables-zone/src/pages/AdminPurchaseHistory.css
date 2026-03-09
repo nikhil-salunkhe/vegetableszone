@@ -1,0 +1,114 @@
+.purchase-container{
+    padding:40px;
+    background:#f4f8fb;
+    min-height:100vh;
+}
+
+.page-title{
+    text-align:center;
+    font-size:32px;
+    font-weight:700;
+    margin-bottom:40px;
+    color:#2c3e50;
+}
+
+/* GRID */
+
+.purchase-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:25px;
+}
+
+/* CARD */
+
+.purchase-card{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+    transition:all 0.3s ease;
+    animation:fadeUp 0.6s ease;
+}
+
+.purchase-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 12px 25px rgba(0,0,0,0.15);
+}
+
+.supplier-name{
+    font-size:20px;
+    margin-bottom:10px;
+    color:#34495e;
+}
+
+/* STATUS */
+
+.status{
+    margin-top:10px;
+    font-weight:bold;
+    padding:6px 12px;
+    border-radius:20px;
+    display:inline-block;
+}
+
+.status.Pending{
+    background:#fff3cd;
+    color:#e67e22;
+}
+
+.status.Paid{
+    background:#d4edda;
+    color:#27ae60;
+}
+
+/* PAYMENT UPDATE */
+
+.payment-update{
+    margin-top:15px;
+}
+
+.payment-update label{
+    font-weight:600;
+    margin-right:10px;
+}
+
+.payment-update select{
+    padding:8px 12px;
+    border-radius:6px;
+    border:1px solid #ccc;
+    outline:none;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.payment-update select:hover{
+    border-color:#27ae60;
+}
+
+/* ANIMATION */
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    .purchase-container{
+        padding:20px;
+    }
+
+    .page-title{
+        font-size:26px;
+    }
+
+}
