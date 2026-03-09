@@ -27,7 +27,7 @@ const Login = () => {
       localStorage.setItem("userId", data.userId);
 
       // 👉 REDIRECT TO HOME
-      navigate("/");
+      navigate("/home");
     } else {
       alert(data.message || "Login failed");
     }

@@ -228,7 +228,7 @@ const Register = () => {
 
         <p className="auth-text">
           Already have an account?{" "}
-          <span onClick={() => navigate("/login")}>Login here</span>
+          <span onClick={() => navigate("/")}>Login here</span>
         </p>
       </form>
     </div>
