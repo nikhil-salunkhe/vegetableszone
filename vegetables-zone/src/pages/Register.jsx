@@ -71,7 +71,7 @@ const Register = () => {
 
     try {
       // 1️⃣ Verify OTP
-      const res = await fetch("http://localhost:5000/api/otp/verify-otp", {
+      const res = await fetch("https://vegetableszone.onrender.com/api/otp/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ mobile: form.mobile, otp }),
@@ -100,7 +100,7 @@ const Register = () => {
       }
 
       const registerRes = await fetch(
-        "http://localhost:5000/api/users/register",
+        "https://vegetableszone.onrender.com/api/users/register",
         {
           method: "POST",
           body: registerData, // ⚠️ No headers here
