@@ -15,7 +15,7 @@ const Profile = () => {
       return;
     }
 
-    fetch(`http://localhost:5000/api/users/${userId}`, {
+    fetch(`https://vegetableszone.onrender.com/api/users/${userId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -41,7 +41,7 @@ const Profile = () => {
             <div className="profile-image">
               {user.profilePhoto ? (
                 <img
-                  src={`http://localhost:5000/uploads/${user.profilePhoto}`}
+                  src={`https://vegetableszone.onrender.com/uploads/${user.profilePhoto}`}
                   alt="Profile"
                 />
               ) : (
