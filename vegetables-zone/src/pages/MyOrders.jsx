@@ -19,7 +19,7 @@ const MyOrders = () => {
     if (!userId || !token) return;
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:5000/api/orders/${userId}`, {
+      const res = await fetch(`https://vegetableszone.onrender.com/api/orders/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -48,7 +48,7 @@ const MyOrders = () => {
     if (!window.confirm("Are you sure you want to cancel this order?")) return;
     try {
       const res = await fetch(
-        `http://localhost:5000/api/orders/delete/${orderId}`,
+        `https://vegetableszone.onrender.com/api/orders/delete/${orderId}`,
         { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
       );
       const data = await res.json();
@@ -65,7 +65,7 @@ const MyOrders = () => {
     if (!window.confirm("Remove this item from order?")) return;
     try {
       const res = await fetch(
-        `http://localhost:5000/api/orders/remove-item/${orderId}/${itemId}`,
+        `https://vegetableszone.onrender.com/api/orders/remove-item/${orderId}/${itemId}`,
         { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
       );
       const data = await res.json();
@@ -140,7 +140,7 @@ const MyOrders = () => {
                   <img
                     src={
                       item.image
-                        ? `http://localhost:5000/uploads/${item.image}`
+                        ? `https://vegetableszone.onrender.com/uploads/${item.image}`
                         : "https://via.placeholder.com/80?text=No+Image"
                     }
                     alt={item.name}

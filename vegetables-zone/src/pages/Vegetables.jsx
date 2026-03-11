@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Vegetables.css";
 
-const API = "http://localhost:5000";
+const API = "https://vegetableszone.onrender.com";
 
 const Vegetables = () => {
   const [vegetables, setVegetables] = useState([]);
