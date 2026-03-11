@@ -7,12 +7,11 @@ const Vegetables = () => {
   const [vegetables, setVegetables] = useState([]);
   const [category, setCategory] = useState("All");
   const [quantities, setQuantities] = useState({});
-  const [searchTerm, setSearchTerm] = useState(""); // ✅ Search term
+  const [searchTerm, setSearchTerm] = useState("");
 
-  // 🔥 Decide unit based ONLY on category
   const getUnit = (veg) => (veg.category === "Leafy" ? "Bunch" : "Kg");
 
-  // ✅ Fetch vegetables
+  // Fetch vegetables
   useEffect(() => {
     fetch(`${API}/api`)
       .then((res) => res.json())
@@ -20,16 +19,14 @@ const Vegetables = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  // ✅ Filtered vegetables by category & search
+  // Filter vegetables
   const filteredVegetables = vegetables
-    .filter((veg) =>
-      category === "All" ? true : veg.category === category
-    )
+    .filter((veg) => (category === "All" ? true : veg.category === category))
     .filter((veg) =>
       veg.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-  // ✅ Quantity handler
+  // Quantity change
   const handleQuantityChange = (id, value) => {
     setQuantities({
       ...quantities,
@@ -37,7 +34,29 @@ const Vegetables = () => {
     });
   };
 
-  // ✅ Add to cart
+  // Increase quantity
+  const increaseQty = (veg) => {
+    const unit = getUnit(veg);
+    const current = quantities[veg._id] || (unit === "Kg" ? 0.25 : 1);
+    const step = unit === "Kg" ? 0.25 : 1;
+
+    if (current + step <= veg.stock) {
+      handleQuantityChange(veg._id, parseFloat((current + step).toFixed(2)));
+    }
+  };
+
+  // Decrease quantity
+  const decreaseQty = (veg) => {
+    const unit = getUnit(veg);
+    const current = quantities[veg._id] || (unit === "Kg" ? 0.25 : 1);
+    const step = unit === "Kg" ? 0.25 : 1;
+
+    if (current - step >= step) {
+      handleQuantityChange(veg._id, parseFloat((current - step).toFixed(2)));
+    }
+  };
+
+  // Add to cart
   const addToCart = async (veg) => {
     const userId = localStorage.getItem("userId");
     if (!userId) {
@@ -48,15 +67,11 @@ const Vegetables = () => {
     const unit = getUnit(veg);
     const selectedQty = quantities[veg._id] || (unit === "Kg" ? 0.25 : 1);
 
-    if (selectedQty > veg.stock) {
-      alert("Not enough stock available");
-      return;
-    }
-
     try {
       const res = await fetch(`${API}/api/cart/add`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+
         body: JSON.stringify({
           userId,
           productId: veg._id,
@@ -70,6 +85,11 @@ const Vegetables = () => {
       });
 
       const data = await res.json();
+
+      const btn = document.getElementById(`btn-${veg._id}`);
+      btn.classList.add("added");
+      setTimeout(() => btn.classList.remove("added"), 800);
+
       alert(data.message);
     } catch (err) {
       console.log(err);
@@ -84,7 +104,7 @@ const Vegetables = () => {
         <p>Choose healthy, live healthy</p>
       </div>
 
-      {/* SEARCH BAR */}
+      {/* SEARCH */}
       <div className="veg-search">
         <input
           type="text"
@@ -94,7 +114,7 @@ const Vegetables = () => {
         />
       </div>
 
-      {/* CATEGORY FILTER */}
+      {/* CATEGORY */}
       <div className="category-filter">
         {["All", "Leafy", "Root", "Fruits"].map((cat) => (
           <button
@@ -114,45 +134,49 @@ const Vegetables = () => {
           const qty = quantities[veg._id] || (unit === "Kg" ? 0.25 : 1);
           const total = (veg.price * qty).toFixed(2);
 
+          const stockPercent = (veg.stock / 20) * 100;
+
           return (
             <div className="veg-card" key={veg._id}>
               <img src={`${API}/uploads/${veg.image}`} alt={veg.name} />
+
               <h3>{veg.name}</h3>
 
-              <p className="price">₹{veg.price} / {unit}</p>
+              <p className="price">
+                ₹{veg.price} / {unit}
+              </p>
+
+              {/* STOCK BAR */}
+              <div className="stock-bar">
+                <div
+                  className="stock-fill"
+                  style={{ width: `${Math.min(stockPercent, 100)}%` }}
+                ></div>
+              </div>
+
               <p className="stock">
                 Stock Available: {veg.stock} {unit}
               </p>
+
               {veg.stock < 5 && <p className="low-stock">⚠️ Only few left!</p>}
 
-              {unit === "Kg" ? (
-                <select
-                  value={qty}
-                  onChange={(e) =>
-                    handleQuantityChange(veg._id, parseFloat(e.target.value))
-                  }
-                >
-                  <option value={0.25}>250g</option>
-                  <option value={0.5}>500g</option>
-                  <option value={1}>1 Kg</option>
-                  <option value={2}>2 Kg</option>
-                  <option value={10}>10 Kg</option>
-                </select>
-              ) : (
-                <input
-                  type="number"
-                  min="1"
-                  max={veg.stock}
-                  value={qty}
-                  onChange={(e) =>
-                    handleQuantityChange(veg._id, parseInt(e.target.value))
-                  }
-                />
-              )}
+              {/* QUANTITY SELECTOR */}
+              <div className="qty-box">
+                <button onClick={() => decreaseQty(veg)}>-</button>
 
+                <span>
+                  {qty} {unit}
+                </span>
+
+                <button onClick={() => increaseQty(veg)}>+</button>
+              </div>
+
+              {/* TOTAL PRICE */}
               <p className="total">Total: ₹{total}</p>
 
+              {/* ADD TO CART */}
               <button
+                id={`btn-${veg._id}`}
                 className="cart-btn"
                 disabled={veg.stock === 0}
                 onClick={() => addToCart(veg)}

@@ -7,7 +7,7 @@ const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const userId = localStorage.getItem("userId");
 
-  // ================= LOAD RAZORPAY SCRIPT =================
+  // ================= LOAD RAZORPAY =================
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
       const script = document.createElement("script");
@@ -18,7 +18,7 @@ const Cart = () => {
     });
   };
 
-  // ================= FETCH USER CART =================
+  // ================= FETCH CART =================
   const fetchCartItems = async () => {
     if (!userId) return;
 
@@ -41,6 +41,7 @@ const Cart = () => {
       await fetch(`${API}/api/cart/remove/${id}`, {
         method: "DELETE",
       });
+
       fetchCartItems();
     } catch (error) {
       console.log(error);
@@ -49,7 +50,7 @@ const Cart = () => {
 
   // ================= UPDATE QUANTITY =================
   const updateQuantity = async (id, newQty) => {
-    if (newQty < 1) return;
+    if (newQty <= 0) return;
 
     try {
       await fetch(`${API}/api/cart/update/${id}`, {
@@ -78,7 +79,6 @@ const Cart = () => {
       return;
     }
 
-    // ✅ Load Razorpay first
     const loaded = await loadRazorpayScript();
 
     if (!loaded) {
@@ -87,11 +87,9 @@ const Cart = () => {
     }
 
     try {
-      // 1️⃣ Create Razorpay Order
-      const res = await fetch(
-        `${API}/api/orders/checkout/${userId}`,
-        { method: "POST" }
-      );
+      const res = await fetch(`${API}/api/orders/checkout/${userId}`, {
+        method: "POST",
+      });
 
       const data = await res.json();
 
@@ -100,32 +98,28 @@ const Cart = () => {
         return;
       }
 
-      // 2️⃣ Razorpay Options
       const options = {
         key: "rzp_test_SLCoWbJ62YvrdO",
         amount: data.razorpayOrder.amount,
         currency: "INR",
-        name: "Fresh Vegetable Shop",
+        name: "Vegetables Zone",
         description: "Vegetable Purchase",
         order_id: data.razorpayOrder.id,
 
         handler: async function (response) {
-          // 3️⃣ Verify Payment
-          const verifyRes = await fetch(
-            `${API}/api/orders/verify`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                ...response,
-                userId,
-              }),
-            }
-          );
+          const verifyRes = await fetch(`${API}/api/orders/verify`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              ...response,
+              userId,
+            }),
+          });
 
           const verifyData = await verifyRes.json();
+
           alert(verifyData.message);
 
           if (verifyRes.ok) {
@@ -141,17 +135,16 @@ const Cart = () => {
 
       const razor = new window.Razorpay(options);
       razor.open();
-
     } catch (error) {
       console.log(error);
       alert("Payment failed");
     }
   };
 
-  const totalAmount = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
+  // ================= TOTAL PRICE =================
+  const totalAmount = cartItems.reduce((total, item) => {
+    return total + item.price * item.quantity;
+  }, 0);
 
   return (
     <div className="cart-page">
@@ -164,54 +157,75 @@ const Cart = () => {
       ) : (
         <>
           <div className="cart-list">
-            {cartItems.map((item) => (
-              <div className="cart-card" key={item._id}>
-                <img
-                  src={
-                    item.image?.startsWith("http")
-                      ? item.image
-                      : `${API}/uploads/${item.image}`
-                  }
-                  alt={item.name}
-                />
+            {cartItems.map((item) => {
+              const subtotal = item.price * item.quantity;
 
-                <div className="cart-details">
-                  <h3>{item.name}</h3>
-                  <p>Price: ₹{item.price}</p>
+              return (
+                <div className="cart-card" key={item._id}>
+                  
+                  {/* IMAGE */}
+                  <img
+                    src={
+                      item.image?.startsWith("http")
+                        ? item.image
+                        : `${API}/uploads/${item.image}`
+                    }
+                    alt={item.name}
+                  />
 
-                  <div className="qty-controls">
-                    <button
-                      onClick={() =>
-                        updateQuantity(item._id, item.quantity - 1)
-                      }
-                    >
-                      -
-                    </button>
+                  {/* DETAILS */}
+                  <div className="cart-details">
+                    <h3>{item.name}</h3>
 
-                    <span>{item.quantity}</span>
+                    <p className="price">
+                      ₹{item.price} / {item.unit}
+                    </p>
 
-                    <button
-                      onClick={() =>
-                        updateQuantity(item._id, item.quantity + 1)
-                      }
-                    >
-                      +
-                    </button>
+                    <p className="qty-text">
+                      Selected: {item.quantity} {item.unit}
+                    </p>
+
+                    <p className="subtotal">
+                      Subtotal: ₹{subtotal.toFixed(2)}
+                    </p>
+
+                    {/* QUANTITY BUTTONS */}
+                    <div className="qty-controls">
+                      <button
+                        onClick={() =>
+                          updateQuantity(item._id, item.quantity - 1)
+                        }
+                      >
+                        −
+                      </button>
+
+                      <span>{item.quantity}</span>
+
+                      <button
+                        onClick={() =>
+                          updateQuantity(item._id, item.quantity + 1)
+                        }
+                      >
+                        +
+                      </button>
+                    </div>
                   </div>
-                </div>
 
-                <button
-                  className="remove-btn"
-                  onClick={() => removeItem(item._id)}
-                >
-                  ❌ Remove
-                </button>
-              </div>
-            ))}
+                  {/* REMOVE */}
+                  <button
+                    className="remove-btn"
+                    onClick={() => removeItem(item._id)}
+                  >
+                    Remove
+                  </button>
+                </div>
+              );
+            })}
           </div>
 
+          {/* SUMMARY */}
           <div className="cart-summary">
-            <h2>Total: ₹{totalAmount.toFixed(2)}</h2>
+            <h2>Total Amount: ₹{totalAmount.toFixed(2)}</h2>
 
             <button className="checkout-btn" onClick={checkout}>
               Proceed to Checkout
