@@ -24,7 +24,7 @@ const EditProfile = () => {
       return;
     }
 
-    fetch(`https://vegetableszone.onrender.com/api/users/${userId}`, {
+    fetch(`http://localhost:5000/api/users/${userId}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -45,7 +45,7 @@ const EditProfile = () => {
         });
 
         if (data.profilePhoto) {
-          setPreview(`https://vegetableszone.onrender.com/uploads/${data.profilePhoto}`);
+          setPreview(`http://localhost:5000/uploads/${data.profilePhoto}`);
         }
       })
       .catch((err) => console.log(err));
@@ -80,7 +80,7 @@ const EditProfile = () => {
     }
 
     const res = await fetch(
-      `https://vegetableszone.onrender.com/api/users/update/${userId}`,
+      `http://localhost:5000/api/users/update/${userId}`,
       {
         method: "PUT",
         headers: { Authorization: `Bearer ${token}` },

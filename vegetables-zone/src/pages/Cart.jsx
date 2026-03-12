@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./Cart.css";
 
-const API = "https://vegetableszone.onrender.com";
+// ✅ Render backend URL
+const API = "https://vegetableszone-backend.onrender.com";
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -27,7 +28,7 @@ const Cart = () => {
       const data = await res.json();
       setCartItems(data);
     } catch (err) {
-      console.log(err);
+      console.log("Cart fetch error:", err);
     }
   };
 
@@ -44,7 +45,7 @@ const Cart = () => {
 
       fetchCartItems();
     } catch (error) {
-      console.log(error);
+      console.log("Remove error:", error);
     }
   };
 
@@ -63,7 +64,7 @@ const Cart = () => {
 
       fetchCartItems();
     } catch (error) {
-      console.log(error);
+      console.log("Update error:", error);
     }
   };
 
@@ -99,7 +100,7 @@ const Cart = () => {
       }
 
       const options = {
-        key: "rzp_test_SLCoWbJ62YvrdO",
+        key: "rzp_test_SLCoWbJ62YvrdO", // Razorpay Test Key
         amount: data.razorpayOrder.amount,
         currency: "INR",
         name: "Vegetables Zone",
@@ -107,24 +108,31 @@ const Cart = () => {
         order_id: data.razorpayOrder.id,
 
         handler: async function (response) {
-          const verifyRes = await fetch(`${API}/api/orders/verify`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              ...response,
-              userId,
-            }),
-          });
+          try {
+            const verifyRes = await fetch(`${API}/api/orders/verify`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_signature: response.razorpay_signature,
+                userId,
+              }),
+            });
 
-          const verifyData = await verifyRes.json();
+            const verifyData = await verifyRes.json();
 
-          alert(verifyData.message);
+            alert(verifyData.message);
 
-          if (verifyRes.ok) {
-            setCartItems([]);
-            window.location.href = "/my-orders";
+            if (verifyRes.ok) {
+              setCartItems([]);
+              window.location.href = "/my-orders";
+            }
+          } catch (error) {
+            console.log("Verification error:", error);
+            alert("Payment verification failed");
           }
         },
 
@@ -136,7 +144,7 @@ const Cart = () => {
       const razor = new window.Razorpay(options);
       razor.open();
     } catch (error) {
-      console.log(error);
+      console.log("Checkout error:", error);
       alert("Payment failed");
     }
   };
@@ -162,7 +170,7 @@ const Cart = () => {
 
               return (
                 <div className="cart-card" key={item._id}>
-                  
+
                   {/* IMAGE */}
                   <img
                     src={
@@ -189,7 +197,7 @@ const Cart = () => {
                       Subtotal: ₹{subtotal.toFixed(2)}
                     </p>
 
-                    {/* QUANTITY BUTTONS */}
+                    {/* QUANTITY CONTROLS */}
                     <div className="qty-controls">
                       <button
                         onClick={() =>
@@ -218,6 +226,7 @@ const Cart = () => {
                   >
                     Remove
                   </button>
+
                 </div>
               );
             })}
